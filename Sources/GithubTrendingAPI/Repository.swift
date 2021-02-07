@@ -9,9 +9,14 @@ import Foundation
 
 /// A value that wraps information about a Github repository.
 struct Repository {
-    var name: Link
+    var link: Link
     var description: String = ""
     var language: String
     var stars: Link
     var forks: Link
+    var name: String {
+        get {
+            return link.text
+        }
+    }
 }
