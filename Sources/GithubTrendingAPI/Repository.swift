@@ -8,7 +8,7 @@
 import Foundation
 
 /// A value that wraps information about a Github repository.
-struct Repository {
+struct Repository: Equatable {
     var link: Link
     var description: String = ""
     var language: String

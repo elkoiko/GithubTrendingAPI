@@ -9,7 +9,7 @@ import Foundation
 import SwiftSoup
 
 /// A value that identifies the location of a resource and its associated text.
-struct Link: CustomStringConvertible {
+struct Link: CustomStringConvertible, Equatable {
     var url: URL?
     var text: String
     
