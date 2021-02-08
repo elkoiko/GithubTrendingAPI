@@ -17,7 +17,28 @@ struct RepositoryFetcher {
         return [Repository]()
     }
     
-    /// makeRepository creates a Repository from the given repository HTML block.
+    // MARK: Factories
+    
+    /// makeLink creates a Link instance from the provided SwiftSoup link block element.
+    ///
+    /// Returns nil if the element does not provide the expected informations.
+    ///
+    /// - Parameter linkBlock: A SwiftSoup.Element object representing an HTML link block.
+    static func makeLink(from linkBlock: Element) -> Link? {
+        var link: Link?
+        
+        do {
+            let linkText: String = try linkBlock.text()
+            let linkURL: String = try linkBlock.attr("href")
+            
+            link = Link(url: URL(string: linkURL, relativeTo: URL(string: "https://github.com")), text: linkText)
+        } catch {
+            link = nil
+        }
+        return link
+    }
+    
+    /// makeRepository creates a Repository instance from the given repository HTML block.
     ///
     /// Returns nil if repoBlock has not a valid format or does not provide enough information.
     ///
@@ -30,7 +51,7 @@ struct RepositoryFetcher {
             let repoLinkBlock: Element? = try repoBlock.select("h1.h3 a").first()
             var repoLink: Link? = nil
             if let block = repoLinkBlock {
-                repoLink = Link(linkBlock: block)
+                repoLink = makeLink(from: block)
             }
             // Retrieving the repo description
             let repoDescBlock: Element? = try repoBlock.select("p.my-1.pr-4").first()
@@ -48,8 +69,8 @@ struct RepositoryFetcher {
             if repoAdditionalLinksBlock.count >= 2 {
                 let repoStarsBlock: Element = repoAdditionalLinksBlock[0]
                 let repoForksBlock: Element = repoAdditionalLinksBlock[1]
-                repoStars = Link(linkBlock: repoStarsBlock)
-                repoForks = Link(linkBlock: repoForksBlock)
+                repoStars = makeLink(from: repoStarsBlock)
+                repoForks = makeLink(from: repoForksBlock)
             }
             
             if let link = repoLink, let stars = repoStars, let forks = repoForks {

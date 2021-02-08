@@ -11,6 +11,29 @@ import XCTest
 import SwiftSoup
 
 final class RepositoryFetcherTests: XCTestCase {
+
+    // MARK: makeLink
+    
+    func testMakeLink() throws {
+        let linkBlockHTML: String =
+        """
+            <a href="/user/repo" class="muted-link d-inline-block mr-3">
+                    <svg aria-label="fork" class="octicon octicon-repo-forked" height="16" viewBox="0 0 16 16" version="1.1" width="16" aria-hidden="true"><path fill-rule="evenodd" d=""></path></svg>
+                    Link text
+            </a>
+        """
+        let document: Document = try SwiftSoup.parse(linkBlockHTML)
+        let linkBlock: Element = try document.select("a").first()!
+        var expected: Link
+        var actual: Link?
+        let githubURL: URL = URL(string: "https://github.com")!
+        
+        expected = Link(url: URL(string: "/user/repo", relativeTo: githubURL), text: "Link text")
+        actual = RepositoryFetcher.makeLink(from: linkBlock)
+                    
+        XCTAssertTrue(actual != nil)
+        XCTAssertEqual(expected, actual!)
+    }
     
     // MARK: makeRepository
     func testMakeRepository_WithDescription() throws {
@@ -115,7 +138,7 @@ final class RepositoryFetcherTests: XCTestCase {
         XCTAssertEqual(expected, actual)
 
     }
-    
+        
     static var allTests = [
         ("testMakeRepository_WithDescription", testMakeRepository_WithDescription),
         ("testMakeRepository_WithoutDescription", testMakeRepository_WithoutDescription),
