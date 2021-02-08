@@ -12,9 +12,26 @@ import SwiftSoup
 struct RepositoryFetcher {
 
     /// fetchRepositories returns an array containing all the trending repositories.
-    static func fetchRepositories() -> [Repository] {
-        // TODO: Implement fetchRepositories
-        return [Repository]()
+    ///
+    /// - Parameter content: String representation of the HTML web page content.
+    static func fetchRepositories(content trendingPage: String) -> [Repository] {
+        var repositories: [Repository] = [Repository]()
+        var repoBlocks: Elements
+
+        do {
+            let document: Document = try SwiftSoup.parse(trendingPage)
+            repoBlocks = try document.select(".Box-row")
+        } catch {
+            return [Repository]()
+        }
+        
+        for repoBlock: Element in repoBlocks {
+            if let repository = makeRepository(from: repoBlock) {
+                repositories.append(repository)
+            }
+        }
+        print(repositories)
+        return repositories
     }
     
     // MARK: Factories

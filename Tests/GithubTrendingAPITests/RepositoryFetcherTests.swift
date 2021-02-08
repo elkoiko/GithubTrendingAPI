@@ -138,8 +138,9 @@ final class RepositoryFetcherTests: XCTestCase {
         XCTAssertEqual(expected, actual)
 
     }
-        
+            
     static var allTests = [
+        ("testMakeLink", testMakeLink),
         ("testMakeRepository_WithDescription", testMakeRepository_WithDescription),
         ("testMakeRepository_WithoutDescription", testMakeRepository_WithoutDescription),
         ("testMakeRepository_InvalidBlock", testMakeRepository_InvalidBlock),
