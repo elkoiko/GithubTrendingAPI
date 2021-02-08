@@ -45,7 +45,7 @@ struct RepositoryFetcher {
             let repoAdditionalLinksBlock: [Element] = try repoBlock.select("div.mt-2 a").array()
             var repoStars: Link? = nil
             var repoForks: Link? = nil
-            if repoAdditionalLinksBlock.count == 2 {
+            if repoAdditionalLinksBlock.count >= 2 {
                 let repoStarsBlock: Element = repoAdditionalLinksBlock[0]
                 let repoForksBlock: Element = repoAdditionalLinksBlock[1]
                 repoStars = Link(linkBlock: repoStarsBlock)
