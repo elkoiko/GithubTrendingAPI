@@ -1,5 +1,5 @@
 //
-//  RepositoryFetcherTests.swift
+//  TrendsFetcherTests.swift
 //  
 //
 //  Created by Thomas Couacault on 08/02/2021.
@@ -10,7 +10,7 @@ import XCTest
 @testable import GithubTrendingAPI
 import SwiftSoup
 
-final class RepositoryFetcherTests: XCTestCase {
+final class TrendsFetcherTests: XCTestCase {
 
     // MARK: makeLink
     
@@ -29,7 +29,7 @@ final class RepositoryFetcherTests: XCTestCase {
         let githubURL: URL = URL(string: "https://github.com")!
         
         expected = Link(url: URL(string: "/user/repo", relativeTo: githubURL), text: "Link text")
-        actual = RepositoryFetcher.makeLink(from: linkBlock)
+        actual = TrendsFetcher.makeLink(from: linkBlock)
                     
         XCTAssertTrue(actual != nil)
         XCTAssertEqual(expected, actual!)
@@ -71,7 +71,7 @@ final class RepositoryFetcherTests: XCTestCase {
                               language: "Programming Language",
                               stars: Link(url: URL(string: "/user/repo/stargazers", relativeTo: githubURL), text: "3,397"),
                               forks: Link(url: URL(string: "/user/repo/network/members.repo", relativeTo: githubURL), text: "1,698"))
-        actual = RepositoryFetcher.makeRepository(from: repoBlock)
+        actual = TrendsFetcher.makeRepository(from: repoBlock)
                 
         XCTAssertTrue(actual != nil)
         XCTAssertEqual(expected, actual!)
@@ -111,7 +111,7 @@ final class RepositoryFetcherTests: XCTestCase {
                               language: "Programming Language",
                               stars: Link(url: URL(string: "/user/repo/stargazers", relativeTo: githubURL), text: "3,397"),
                               forks: Link(url: URL(string: "/user/repo/network/members.repo", relativeTo: githubURL), text: "1,698"))
-        actual = RepositoryFetcher.makeRepository(from: repoBlock)
+        actual = TrendsFetcher.makeRepository(from: repoBlock)
                 
         XCTAssertTrue(actual != nil)
         XCTAssertEqual(expected, actual)
@@ -133,12 +133,12 @@ final class RepositoryFetcherTests: XCTestCase {
         var actual: Repository?
         
         expected = nil
-        actual = RepositoryFetcher.makeRepository(from: repoBlock)
+        actual = TrendsFetcher.makeRepository(from: repoBlock)
                 
         XCTAssertEqual(expected, actual)
 
     }
-            
+
     static var allTests = [
         ("testMakeLink", testMakeLink),
         ("testMakeRepository_WithDescription", testMakeRepository_WithDescription),

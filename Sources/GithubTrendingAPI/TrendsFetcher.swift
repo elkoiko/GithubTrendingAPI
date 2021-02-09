@@ -1,5 +1,5 @@
 //
-//  RepositoryFetcher.swift
+//  TrendsFetcher.swift
 //  
 //
 //  Created by Thomas Couacault on 08/02/2021.
@@ -8,10 +8,20 @@
 import Foundation
 import SwiftSoup
 
-/// Provides a set of methods to retrieve Github's trending repositories
-struct RepositoryFetcher {
+/// Provides a set of methods to retrieve Github's trending repositories and developers
+struct TrendsFetcher {
 
-    /// fetchRepositories returns an array containing all the trending repositories.
+    // MARK: Fetchers
+    
+    /// fetchDevelopers returns an array containing all the trending developers available in content.
+    ///
+    /// - Parameter content: String representation of the HTML web page content.
+    static func fetchDevelopers(content trendingPage: String) -> [Developer] {
+        // TODO: Implement fetchDevelopers
+        return [Developer]()
+    }
+    
+    /// fetchRepositories returns an array containing all the trending repositories available in content.
     ///
     /// - Parameter content: String representation of the HTML web page content.
     static func fetchRepositories(content trendingPage: String) -> [Repository] {
@@ -100,5 +110,15 @@ struct RepositoryFetcher {
             repository = nil
         }
         return repository
+    }
+    
+    /// makeDeveloper creates a Developer instance from the given developer HTML block.
+    ///
+    /// Returns nil if devBlock has not a valid format or does not provide enough information.
+    ///
+    /// - Parameter devBlock: SwiftSoup.Element object representing a developer HTML block
+    static func makeDeveloper(from devBlock: Element) -> Developer? {
+        // TODO: Implement makeDeveloper
+        return nil
     }
 }
