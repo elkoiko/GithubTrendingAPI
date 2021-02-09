@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum TrendingItem {
-    case repository
-    case developer
+public enum TrendingItems {
+    case repositories
+    case developers
 }
