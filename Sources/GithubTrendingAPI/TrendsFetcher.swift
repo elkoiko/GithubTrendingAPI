@@ -17,8 +17,22 @@ struct TrendsFetcher {
     ///
     /// - Parameter content: String representation of the HTML web page content.
     static func fetchDevelopers(content trendingPage: String) -> [Developer] {
-        // TODO: Implement fetchDevelopers
-        return [Developer]()
+        var developers: [Developer] = [Developer]()
+        var devBlocks: Elements
+        
+        do {
+            let document: Document = try SwiftSoup.parse(trendingPage)
+            devBlocks = try document.select("article.Box-row")
+        } catch {
+            return [Developer]()
+        }
+        
+        for devBlock: Element in devBlocks {
+            if let developer = makeDeveloper(from: devBlock) {
+                developers.append(developer)
+            }
+        }
+        return developers
     }
     
     /// fetchRepositories returns an array containing all the trending repositories available in content.
@@ -30,7 +44,7 @@ struct TrendsFetcher {
 
         do {
             let document: Document = try SwiftSoup.parse(trendingPage)
-            repoBlocks = try document.select(".Box-row")
+            repoBlocks = try document.select("article.Box-row")
         } catch {
             return [Repository]()
         }

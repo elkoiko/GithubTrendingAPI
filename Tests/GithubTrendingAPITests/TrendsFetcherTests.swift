@@ -12,6 +12,22 @@ import SwiftSoup
 
 final class TrendsFetcherTests: XCTestCase {
 
+    // MARK: fetchRepositories
+    
+    func testFetchRepositories() {
+        let repositories: [Repository] = TrendsFetcher.fetchRepositories(content: try! String(contentsOf: URL(string: "https://github.com/trending")!))
+        
+        XCTAssertTrue(repositories.count > 0)
+    }
+    
+    // MARK: fetchDevelopers
+
+    func testFetchDevelopers() {
+        let developers: [Developer] = TrendsFetcher.fetchDevelopers(content: try! String(contentsOf: URL(string: "https://github.com/trending/developers")!))
+        
+        XCTAssertTrue(developers.count > 0)
+    }
+    
     // MARK: makeLink
     
     func testMakeLink() throws {
@@ -211,6 +227,8 @@ final class TrendsFetcherTests: XCTestCase {
     }
 
     static var allTests = [
+        ("testFetchRepositories", testFetchRepositories),
+        ("testFetchDevelopers", testFetchDevelopers),
         ("testMakeLink", testMakeLink),
         ("testMakeRepository_WithDescription", testMakeRepository_WithDescription),
         ("testMakeRepository_WithoutDescription", testMakeRepository_WithoutDescription),

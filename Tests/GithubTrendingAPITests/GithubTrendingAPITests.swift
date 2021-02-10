@@ -43,7 +43,7 @@ final class GithubTrendingAPITests: XCTestCase {
         // Per date and language
         XCTAssertEqual(URL(string: "/trending/developers/Swift?since=daily", relativeTo: githubURL), GithubTrendingAPI.makeURL(for: .developers, language: "Swift", dateRange: .daily))
     }
-
+    
     static var allTests = [
         ("testMakeURL_Repositories", testMakeURL_Repositories),
         ("testMakeURL_Developers", testMakeURL_Developers),
