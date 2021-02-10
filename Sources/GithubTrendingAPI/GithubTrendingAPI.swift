@@ -55,8 +55,15 @@ public func getRepositories(language: String = "", dateRange: DateRange? = nil) 
 ///     - language: The name of the language used to filter the developers.
 ///     - dateRange: The date range used to filter the developers.
 public func getDevelopers(language: String = "", dateRange: DateRange? = nil) -> [Developer] {
-    // TODO: Implement getDevelopers
-    return [Developer]()
+    var pageContent: String?
+    var developers: [Developer] = [Developer]()
+    let trendingURL: URL = makeURL(for: .developers, language: language, dateRange: dateRange)
+    
+    pageContent = try? String(contentsOf: trendingURL)
+    if let content = pageContent {
+        developers = TrendsFetcher.fetchDevelopers(content: content)
+    }
+    return developers
 }
 
 
