@@ -117,7 +117,44 @@ struct TrendsFetcher {
     ///
     /// - Parameter devBlock: SwiftSoup.Element object representing a developer HTML block
     static func makeDeveloper(from devBlock: Element) -> Developer? {
-        // TODO: Implement makeDeveloper
-        return nil
+        var developer: Developer? = nil
+        
+        do {
+            // Retrieving the developer image data
+            let devImgDataBlock: Element? = try devBlock.select("div.mx-3 a img.avatar-user").first()
+            var devImgData: Data? = nil
+            if let block = devImgDataBlock, devImgDataBlock?.hasAttr("src") ?? false {
+                devImgData = try? Data(contentsOf: URL(string: block.attr("src"))!)
+            }
+            
+            // Retrieving the developer full name
+            let devFullNameBlock: Element? = try devBlock.select("div.col-md-6 h1.h3 a").first()
+            let devFullName: String = try devFullNameBlock?.text() ?? ""
+            
+            // Retrieving the developer profile link
+            let devProfileLinkBlock: Element? = try devBlock.select("div.col-md-6 p a").first()
+            var devProfile: Link? = nil
+            if let block = devProfileLinkBlock {
+                devProfile = makeLink(from: block)
+            }
+            
+            // Retrieving the developer popular repository
+            let devRepositoryLinkBlock: Element? = try devBlock.select("div.col-md-6 div.mt-2.mb-3.my-md-0 article h1.h4 a").first()
+            var devRepositoryLink: Link? = nil
+            if let block = devRepositoryLinkBlock {
+                devRepositoryLink = makeLink(from: block)
+            }
+             
+            let devRepositoryDescriptionBlock : Element? = try devBlock.select("div.col-md-6 div.mt-2.mb-3.my-md-0 article div.f6").first()
+            let devRepositoryDescription: String = try devRepositoryDescriptionBlock?.text() ?? ""
+            
+            if let profile = devProfile, let repoLink = devRepositoryLink {
+                developer = Developer(profilePictureData: devImgData, fullName: devFullName, profile: profile,
+                                      repository: Repository(link: repoLink, description: devRepositoryDescription))
+            }
+        } catch {
+            developer = nil
+        }
+        return developer
     }
 }

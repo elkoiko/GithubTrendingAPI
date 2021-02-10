@@ -138,11 +138,84 @@ final class TrendsFetcherTests: XCTestCase {
         XCTAssertEqual(expected, actual)
 
     }
+    
+    // MARK: makeDeveloper
+    func testMakeDeveloper() throws {
+        let avatarLink: String = "https://avatars.githubusercontent.com/u/0"
+        let devBlockHTML: String =
+        """
+          <article class="Box-row">
+            <div class="mx-3">
+                <a>
+                    <img class="avatar-user" src="\(avatarLink)"/>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <h1 class="h3">
+                    <a>Full Name</a>
+                </h1>
+                <p class="f4 text-normal mb-1">
+                    <a href="/username">User Name</a>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div class="mt-2 mb-3 my-md-0">
+                    <article>
+                        <h1 class="h4 lh-condensed">
+                            <a href="/username/repository">Repository</a>
+                        </h1>
+                        <div class="f6 text-gray mt-1">Repository description</div>
+                    </article>
+                </div>
+            </div>
+          </article>
+        """
+        let document: Document = try SwiftSoup.parse(devBlockHTML)
+        let devBlock: Element = try document.select(".Box-row").first()!
+        var expected: Developer?
+        var actual: Developer?
+
+        expected = try Developer(profilePictureData: Data(contentsOf: URL(string: avatarLink)!),
+                             fullName: "Full Name",
+                             profile: Link(url: URL(string: "/username", relativeTo: URL(string: "https://github.com")), text: "User Name"),
+                             repository: Repository(
+                                            link: Link(url: URL(string: "/username/repository", relativeTo: URL(string: "https://github.com")),
+                                                       text: "Repository"),
+                                            description: "Repository description"))
+        actual = TrendsFetcher.makeDeveloper(from: devBlock)
+        
+        XCTAssertEqual(expected, actual)
+    }
+    
+    func testMakeDeveloper_InvalidBlock() throws {
+        let avatarLink: String = "https://avatars.githubusercontent.com/u/0"
+        let devBlockHTML: String =
+        """
+          <article class="Box-row">
+            <div class="mx-3">
+                <a>
+                    <img class="avatar-user" src="\(avatarLink)"/>
+                </a>
+            </div>
+          </article>
+        """
+        let document: Document = try SwiftSoup.parse(devBlockHTML)
+        let devBlock: Element = try document.select(".Box-row").first()!
+        var expected: Developer?
+        var actual: Developer?
+
+        expected = nil
+        actual = TrendsFetcher.makeDeveloper(from: devBlock)
+        
+        XCTAssertEqual(expected, actual)
+    }
 
     static var allTests = [
         ("testMakeLink", testMakeLink),
         ("testMakeRepository_WithDescription", testMakeRepository_WithDescription),
         ("testMakeRepository_WithoutDescription", testMakeRepository_WithoutDescription),
         ("testMakeRepository_InvalidBlock", testMakeRepository_InvalidBlock),
+        ("testMakeDeveloper", testMakeDeveloper),
+        ("testMakeDeveloper_InvalidBlock", testMakeDeveloper_InvalidBlock),
     ]
 }

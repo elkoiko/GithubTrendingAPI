@@ -11,9 +11,9 @@ import Foundation
 public struct Repository: Equatable {
     var link: Link
     var description: String = ""
-    var language: String
-    var stars: Link
-    var forks: Link
+    var language: String = ""
+    var stars: Link?
+    var forks: Link?
     var name: String {
         get {
             return link.text
