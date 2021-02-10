@@ -28,35 +28,34 @@ public func makeURL(for item: TrendingItems, language: String = "", dateRange: D
     }
     if let range = dateRange {
         url += "?since=\(range.rawValue)"
-    }    
+    }
     return URL(string: url, relativeTo: githubURL)!
 }
 
-/// getRepositories returns all the available trending repositories.
+/// getRepositories returns all the available trending repositories or an empty array when nothing available.
 ///
 /// - Parameters:
 ///     - language: The name of the language used to filter the repositories.
 ///     - dateRange: The date range used to filter the repositories.
 public func getRepositories(language: String = "", dateRange: DateRange? = nil) -> [Repository] {
-    // TODO: Implement getRepositories
+    var pageContent: String?
+    var repositories: [Repository] = [Repository]()
+    let trendingURL: URL = makeURL(for: .repositories, language: language, dateRange: dateRange)
 
-    // let url: URL = makeURL(for: .repository, language: language, dateRange: dateRange)
-    // Retrieve the string content of the web page with the URL
-    // fetch all repositories
-    return [Repository]()
+    pageContent = try? String(contentsOf: trendingURL)
+    if let content = pageContent {
+        repositories = TrendsFetcher.fetchRepositories(content: content)
+    }
+    return repositories
 }
 
-/// getDevelopers returns all the available trending developers.
+/// getDevelopers returns all the available trending developers or an empty array when nothing available.
 ///
 /// - Parameters:
 ///     - language: The name of the language used to filter the developers.
 ///     - dateRange: The date range used to filter the developers.
 public func getDevelopers(language: String = "", dateRange: DateRange? = nil) -> [Developer] {
     // TODO: Implement getDevelopers
-
-    // let url: URL = makeURL(for: .developer, language: language, dateRange: dateRange)
-    // Retrieve the string content of the web page with the URL
-    // fetch all developers
     return [Developer]()
 }
 

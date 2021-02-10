@@ -40,7 +40,6 @@ struct TrendsFetcher {
                 repositories.append(repository)
             }
         }
-        print(repositories)
         return repositories
     }
     
